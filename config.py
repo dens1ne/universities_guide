@@ -7,4 +7,3 @@ DEFAULT_COMMANDS = (
 
 res = cur.execute("""SELECT name FROM universities_list""").fetchall()
 universities = [i[0] for i in res]
-current_university = -1
