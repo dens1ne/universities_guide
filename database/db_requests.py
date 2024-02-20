@@ -7,7 +7,8 @@ cur = conn.cursor()
 def short_name(university: str, olympiad: str):
     result = cur.execute(
         f"""SELECT short_name FROM '{university}' 
-                             WHERE type_of_comp like '%{olympiad}%' OR copm like '%{olympiad}%'"""
+                             WHERE type_of_comp LIKE '%{olympiad}%' OR type_of_comp LIKE '%{olympiad.lower()}%'
+                             OR copm LIKE '%{olympiad}%' OR copm LIKE '%{olympiad.lower()}%'"""
     ).fetchall()
     return result
 
