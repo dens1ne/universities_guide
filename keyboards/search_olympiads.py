@@ -100,7 +100,6 @@ def next_move(call: telebot.types.CallbackQuery):
     elif call.data == "calculate":
         message = call.message
         with bot.retrieve_data(call.from_user.id, message.chat.id) as data:
-            print(data["confirmed"])
             bot.edit_message_text(
                 "Выбран университет: {university}\n"
                 "Суммарное количество бонусных баллов: {bonus} из 10\n\n"
@@ -157,20 +156,19 @@ def after_confirm(call: telebot.types.CallbackQuery):
             data["confirmed"][data["selected_olymp"]] = (degrs[1], bonus[1])
         elif call.data == degrs[2]:
             data["confirmed"][data["selected_olymp"]] = (degrs[2], bonus[2])
-
-        if call.data == "back":
-            base_message = data["start_message"]
-            bot.edit_message_text(
-                text=f'Выбранный университет: {data["selected_university"]}\n'
-                "Выберите один из предложенных вариантов:",
-                chat_id=base_message.chat.id,
-                message_id=base_message.message_id,
-            )
-            bot.edit_message_reply_markup(
-                base_message.chat.id,
-                base_message.message_id,
-                reply_markup=olymp_select_markup(data["result"]),
-            )
-            bot.set_state(call.from_user.id, SearchStates.select_olymp, message.chat.id)
-        else:
-            start_message(call)
+    if call.data == "back":
+        base_message = data["start_message"]
+        bot.edit_message_text(
+            text=f'Выбранный университет: {data["selected_university"]}\n'
+            "Выберите один из предложенных вариантов:",
+            chat_id=base_message.chat.id,
+            message_id=base_message.message_id,
+        )
+        bot.edit_message_reply_markup(
+            base_message.chat.id,
+            base_message.message_id,
+            reply_markup=olymp_select_markup(data["result"]),
+        )
+        bot.set_state(call.from_user.id, SearchStates.select_olymp, message.chat.id)
+    else:
+        start_message(call)
