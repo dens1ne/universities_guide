@@ -100,12 +100,15 @@ def next_move(call: telebot.types.CallbackQuery):
     elif call.data == "calculate":
         message = call.message
         with bot.retrieve_data(call.from_user.id, message.chat.id) as data:
+            bonus = sum(int(value[1]) for value in data["confirmed"].values())
+            if bonus > 10:
+                bonus = 10
             bot.edit_message_text(
                 "Выбран университет: {university}\n"
                 "Суммарное количество бонусных баллов: {bonus} из 10\n\n"
                 "Чтобы заново подсчитать баллы, введите команду /start".format(
                     university=data["selected_university"],
-                    bonus=sum(int(value[1]) for value in data["confirmed"].values()),
+                    bonus=bonus,
                 ),
                 chat_id=message.chat.id,
                 message_id=message.message_id,
